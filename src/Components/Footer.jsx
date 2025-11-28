@@ -8,7 +8,7 @@ const Footer = () => {
            <div >
             <img src={assets.logo} className='mb-5 w-32 ' alt="" />
             <p className='w-full md:w-2/3 text-gray-600'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.
+Gifts4Corporate is a leading provider of Branded merchandise, Custom uniform solutions, Merchandising, Corporate Gifts and Hampers
             </p>
            </div>
 
@@ -25,8 +25,8 @@ const Footer = () => {
      <div>
         <p className='text-xl font-medium mb-5 '>GET IN TOUCH</p>
         <ul className='flex flex-col gap-1 text-gray-600'>
-            <li>+91-806858484</li>
-            <li>contact@gift4corp.com</li>
+            <li>+91-9620044002</li>
+            <li>sales@gifts4corp.com</li>
         </ul>
      </div>
 

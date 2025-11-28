@@ -53,6 +53,11 @@ import p_img49 from './p_img49.png'
 import p_img50 from './p_img50.png'
 import p_img51 from './p_img51.png'
 import p_img52 from './p_img52.png'
+import jack1 from './jack1.png'
+import jackblue1 from './jackblue1.png'
+import jackblue2 from './jackblue2.png'
+import jackblue3 from './jackblue3.png'
+import jackblue4 from './jackblue4.png'
 
 
 import logo from './logo.png'
@@ -73,6 +78,9 @@ import contact_img from './contact_img.png'
 import razorpay_logo from './razorpay_logo.png'
 import stripe_logo from './stripe_logo.png'
 import cross_icon from './cross_icon.png'
+import jack2 from './jack2.png'
+import jack3 from './jack3.png'
+import jack4 from './jack4.png'
 
 export const assets = {
     logo,
@@ -715,6 +723,30 @@ export const products = [
         image: [p_img52],
         category: "Men",
         subCategory: "Winterwear",
+        sizes: ["S", "M", "L", "XL"],
+        date: 1716668445448,
+        bestseller: false
+    },
+    {
+        _id: "aaabz",
+        name: "JACK&JONES",
+        description: "Experience ultimate comfort with our 100% Combed Cotton Tee, crafted for a smooth, premium feel. The 180 GSM fabric offers the perfect balance of lightness and durability, while the elastic round neck ensures long-lasting comfort and shape retention. Bio-washed treatment adds extra softness and keeps the tee looking fresh even after repeated washes. Made from BCI-sourced cotton and produced in a green facility, this tee not only feels good on you but is also gentle on the planet.",
+        price: 450,
+        image: [jack1,jack2,jack3,jack4],
+        category: "Men",
+        subCategory: "T-shirts",
+        sizes: ["S", "M", "L", "XL"],
+        date: 1716668445448,
+        bestseller: false
+    },
+    {
+        _id: "aaabz",
+        name: "Jack and Jones Joren Round Neck-Navy Blue",
+        description: "Experience ultimate comfort with our 100% Combed Cotton Tee, crafted for a smooth, premium feel. The 180 GSM fabric offers the perfect balance of lightness and durability, while the elastic round neck ensures long-lasting comfort and shape retention. Bio-washed treatment adds extra softness and keeps the tee looking fresh even after repeated washes. Made from BCI-sourced cotton and produced in a green facility, this tee not only feels good on you but is also gentle on the planet.",
+        price: 450,
+        image: [jackblue1,jackblue2,jackblue3,jackblue4],
+        category: "Men",
+        subCategory: "T-shirts",
         sizes: ["S", "M", "L", "XL"],
         date: 1716668445448,
         bestseller: false

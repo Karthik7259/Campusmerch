@@ -15,16 +15,16 @@ const Contact = () => {
               <p className='font-semibold text-xl text-gray-600'>Our Store
 
 </p>
-              <p className='text-gray-500'>54709 Willms Station
-                <br /> Suite 350, Washington, USA
+              <p className='text-gray-500'>Gifts4Corporate, 
+                <br /> Bengaluru, India
 
 
 </p>
-                <p className='text-gray-500'>Tel: (415) 555-0132
-                <br /> Email:campusmerch@gmail.com
+                <p className='text-gray-500'>+91-9620044002
+                <br /> Email:sales@gifts4corp.com
 </p>
             
-            <p className='font-semibold text-xl text-gray-600'>Carres at Campusmerch</p>
+            <p className='font-semibold text-xl text-gray-600'>Carres at gifts4corp</p>
            <p className='text-gray-500'>
             Learn more about our teams and job openings. We’re always looking for talented people to help us create the best online shopping experience for our customers.
 

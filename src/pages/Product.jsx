@@ -64,6 +64,7 @@ useEffect(() => {
              <p className='pl-2 '>{122}</p>
       </div>
        <p  className='mt-5 text-3xl font-medium'>{currency}{productData.price}</p>
+        <p className='text-sm text-gray-500 line-through '>M.R.P: {currency}{productData.Mrpprice}</p>
       <p className='mt-5 text-gray-500 md:w'>{productData.description}</p>
       <div className='flex flex-col gap-4 my-8'>
           <p>Select Size</p>

@@ -92,7 +92,7 @@ const Collection = () => {
      useEffect(()=>{
 
       applyFilter();
-     },[category,subCategory,search,showSearch])
+     },[category,subCategory,search,showSearch,products])
     
 
      useEffect(()=>{
@@ -147,6 +147,7 @@ const Collection = () => {
 
                    <input type="checkbox" className='w-3'  value={'Winterwear'} onChange={toggleSubCategory} /> Winterwear
                   </p>
+                
                  </div>
             </div>
          </div>
@@ -177,7 +178,7 @@ const Collection = () => {
      <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6 '>
         {
            filteredProducts.map((item,index)=>(
-            <Productitem key={index} name={item.name} id={item._id} price={item.price} image={item.image}  />
+            <Productitem key={index} name={item.name} id={item._id} price={item.price} Mrpprice={item.Mrpprice} image={item.image}  />
 
            ))
 

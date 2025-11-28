@@ -14,14 +14,11 @@ const About = () => {
                className='w-full md:max-w-[450px] '
               src={assets.about_img} alt="" />
               <div className='flex flex-col justify-center gap-6 md:w-2/4 text-gray-600'>
-                    <p>CampusMerch was born out of a passion for innovation and a desire to revolutionize the way people shop online. Our journey began with a simple idea: to provide a platform where customers can easily discover, explore, and purchase a wide range of products from the comfort of their homes.
-
-</p>
-                    <p>Since our inception, we've worked tirelessly to curate a diverse selection of high-quality products that cater to every taste and preference. From fashion and beauty to electronics and home essentials, we offer an extensive collection sourced from trusted brands and suppliers.
-
-</p>
+                    <p>Gifts4Corporate is a leading provider of branded merchandise, custom uniform solutions, corporate gifts, hampers, and merchandising services. Partnering with businesses across India, we specialize in delivering unique, practical, and impact-driven products that enhance ROI on marketing campaigns, employee engagement programs, and brand-building initiatives.</p>
+                    <p>What sets us apart is our relentless pursuit of innovation and our commitment to meaningful storytelling. This philosophy is beautifully reflected in our signature gift hampers—each thoughtfully curated box includes captivating stories showcasing India’s folk art traditions and the craftsmanship of artisans from diverse regions. By supporting these artisans, we contribute to preserving India’s rich cultural heritage for future generations.</p>
 <b className='text-gray-800'>Our mission</b>
-<p>Our mission at Campusmerch is to empower customers with choice, convenience, and confidence. We're dedicated to providing a seamless shopping experience that exceeds expectations, from browsing and ordering to delivery and beyond.
+<p>
+  With meticulous attention to detail and rigorous quality checks, Gifts4Corporate has earned the trust of leading organizations for decades. Whether it’s elevating your brand presence or creating memorable experiences for your stakeholders, we are your reliable partner for all corporate gifting and merchandising needs.
 
 </p>
               </div>
