@@ -1,8 +1,11 @@
 import React from 'react'
+import ComingSoonComponent from '../Components/ComingSoonComponent'
 
 const Homedorm = () => {
   return (
-    <div>Homedorm</div>
+    <div>
+        <ComingSoonComponent />
+    </div>
   )
 }
 

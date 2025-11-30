@@ -1,8 +1,11 @@
 import React from 'react'
+import ComingSoonComponent from '../Components/ComingSoonComponent'
 
 const Giftcombos = () => {
   return (
-    <div>Giftcombos</div>
+    <div>
+      <ComingSoonComponent />
+    </div>
   )
 }
 
