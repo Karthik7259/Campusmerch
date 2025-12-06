@@ -7,6 +7,7 @@ import NewsletteBox from '../Components/NewsletteBox'
 import FeaturedSlider from '../Components/FeaturedSlider'
 import WhyChooseUs from '../Components/WhyChooseUs'
 import Categoryslider from '../Components/Categoryslider'
+import ProductRating from '../Components/ProductRating'
 
 const Home = () => {
   return (
@@ -14,10 +15,9 @@ const Home = () => {
       <Hero/>
       <FeaturedSlider/>
       <Categoryslider/>
-      <LastestCollection/>
-      
-      
-      <BestSeller/>
+      {/* <LastestCollection/> */}
+      <ProductRating/>
+      {/* <BestSeller/> */}
       <WhyChooseUs/>
       <OurPolicy/>
       {/* <NewsletteBox/> */}
