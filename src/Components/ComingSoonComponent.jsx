@@ -1,5 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { assets } from '../assets/assets';
 
 const ComingSoonComponent = () => {
@@ -93,15 +94,15 @@ const ComingSoonComponent = () => {
           transition={{ duration: 0.6, delay: 1 }}
           className='mt-12'
         >
-          <a 
-            href="/Collection" 
+          <Link 
+            to="/Collection" 
             className='inline-flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors duration-300 font-medium'
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
             </svg>
             Continue Shopping
-          </a>
+          </Link>
         </motion.div>
       </motion.div>
     </div>
