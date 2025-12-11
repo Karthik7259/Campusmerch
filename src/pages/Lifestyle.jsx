@@ -40,7 +40,7 @@ const Lifestyle = () => {
   };
 
   return (
-    <div className='border-t pt-10'>
+    <div className='border-t pt-10 pb-20'>
       <div className='text-center py-8 text-3xl'>
         <Title text1={'LIFESTYLE & '} text2={'UTILITY ITEMS'} />
         <p className='w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600'>
