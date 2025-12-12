@@ -15,6 +15,8 @@ const Product = () => {
    const [image,setImage] = useState('');
 
    const [size,setSize] = useState('');
+   
+   const [activeTab, setActiveTab] = useState('mission');
 
 const fetchProductData = async() => {
    
@@ -156,22 +158,84 @@ useEffect(() => {
       <hr className='mt-8 sm:w-4/5 ' />
       <div className='text-sm text-gray-500 mt-5 flex flex-col gap-1 '
       >
-       <p className=''>100% Orignal Product</p>
-       <p className=''>Cash on Delivery is Available on the product</p>
-       <p className=''>Easy Returns and Exchanges policy within 7 days</p>
+       <p className=''>Pan-India Service With timely deliveries</p>
+       <p className='text-orange-600 font-medium'>💡 Tip: Check size chart before purchase</p>
       </div>
      </div>
   </div>
-  {/* comment Description */}
+  {/* Mission & Vision Section */}
 
   <div className='mt-20'>
      <div className='flex'>
-      <b className='border px-5 py-3 text-sm '>Description</b>
-      <p className='border px-5 py-3 text-sm '>Reviews(122)</p>
+      <button 
+        onClick={() => setActiveTab('mission')}
+        className={`border px-5 py-3 text-sm font-medium transition-colors ${activeTab === 'mission' ? 'bg-black text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+      >
+        Our Mission
+      </button>
+      <button 
+        onClick={() => setActiveTab('vision')}
+        className={`border px-5 py-3 text-sm font-medium transition-colors ${activeTab === 'vision' ? 'bg-black text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+      >
+        Our Vision
+      </button>
      </div>
-     <div className='flex flex-col gap-4 border px-6 py-6 text-sm text-gray-500'>
-         <p>An e-commerce website is an online platform that facilitates the buying and selling of products or services over the internet. It serves as a virtual marketplace where businesses and individuals can showcase their products, interact with customers, and conduct transactions without the need for a physical presence. E-commerce websites have gained immense popularity due to their convenience, accessibility, and the global reach they offer.</p>
-          <p>E-commerce websites typically display products or services along with detailed descriptions, images, prices, and any available variations (e.g., sizes, colors). Each product usually has its own dedicated page with relevant information.</p>
+     <div className='flex flex-col gap-4 border px-6 py-6 text-sm text-gray-700'>
+         {activeTab === 'mission' ? (
+           <>
+             <h3 className='font-bold text-lg text-gray-900 mb-2'>Our Mission</h3>
+             <p>Our extensive range of customizable & branded gifting options enables companies to express appreciation, foster loyalty and differentiate themselves in a competitive marketplace.</p>
+             <p>Our mission is to create memorable gifting experiences that not only enhance business relationships but also drive sustainable growth for years to come.</p>
+             
+             <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
+               <div className='flex gap-3 items-start'>
+                 <div className='w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0'>
+                   <span className='text-2xl'>👥</span>
+                 </div>
+                 <div>
+                   <h4 className='font-semibold text-gray-900'>Stakeholder Care</h4>
+                   <p className='text-xs text-gray-600 mt-1'>We are dedicated to caring for our stakeholders, environment, customers, shareholders, community, and our people (employees & partners).</p>
+                 </div>
+               </div>
+               
+               <div className='flex gap-3 items-start'>
+                 <div className='w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0'>
+                   <span className='text-2xl'>⚡</span>
+                 </div>
+                 <div>
+                   <h4 className='font-semibold text-gray-900'>Speed & Responsiveness</h4>
+                   <p className='text-xs text-gray-600 mt-1'>We prioritize speed, responsiveness, and proactive approaches, fostered through collaboration and the empowerment of our employees.</p>
+                 </div>
+               </div>
+               
+               <div className='flex gap-3 items-start'>
+                 <div className='w-12 h-12 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0'>
+                   <span className='text-2xl'>🌱</span>
+                 </div>
+                 <div>
+                   <h4 className='font-semibold text-gray-900'>Sustainability</h4>
+                   <p className='text-xs text-gray-600 mt-1'>We are committed to eco-friendly and safe practices, sourcing sustainable materials, and reducing our environmental footprint.</p>
+                 </div>
+               </div>
+               
+               <div className='flex gap-3 items-start'>
+                 <div className='w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0'>
+                   <span className='text-2xl'>⚖️</span>
+                 </div>
+                 <div>
+                   <h4 className='font-semibold text-gray-900'>Integrity</h4>
+                   <p className='text-xs text-gray-600 mt-1'>We uphold the highest standards of ethics, driven by integrity and mutual trust.</p>
+                 </div>
+               </div>
+             </div>
+           </>
+         ) : (
+           <>
+             <h3 className='font-bold text-lg text-gray-900 mb-2'>Our Vision</h3>
+             <p>Our vision is to become the most valued gifting partner for businesses looking to build valuable connections and enhance brand recognition through thoughtful and personalized gifts.</p>
+             <p>We aim to continue evolving by offering innovative and sustainable gifting solutions that align with corporate values and help companies grow and make a long lasting impact.</p>
+           </>
+         )}
      </div>
   </div>
 

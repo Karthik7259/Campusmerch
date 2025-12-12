@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
+import { useNavigate } from "react-router-dom";
 import Productitem from "./Productitem";
 
 const FeaturedSlider = () => {
   const { products } = useContext(ShopContext);
+  const navigate = useNavigate();
   const [index, setIndex] = useState(0);
 
   // take only first 4 products for slider
@@ -40,7 +42,10 @@ const FeaturedSlider = () => {
           Discover our most trending & value-packed outfits chosen from our latest
           collection. Crafted for comfort, fashion, and a lasting impression.
         </p>
-        <button className="mt-4 bg-black text-white px-5 py-2 rounded-md hover:bg-gray-800 transition-all duration-300">
+        <button 
+          onClick={() => navigate('/collection')}
+          className="mt-4 bg-black text-white px-5 py-2 rounded-md hover:bg-gray-800 transition-all duration-300"
+        >
           Explore Collection →
         </button>
       </div>

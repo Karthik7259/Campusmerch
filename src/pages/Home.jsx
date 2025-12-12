@@ -14,7 +14,7 @@ import BrandMarquee from '../Components/BrandMarquee'
 const Home = () => {
   return (
     <div>
-      <div className='mx-2 sm:mx-4 md:mx-8'>
+      <div className='mx-1 sm:mx-2 md:mx-4 lg:mx-4'>
         <Hero/>
       </div>
       <CategoryShowcase/>
@@ -24,11 +24,12 @@ const Home = () => {
       {/* <LastestCollection/> */}
 
       <BrandMarquee/>
-      <ProductRating/>
+    
       {/* <BestSeller/> */}
       <WhyChooseUs/>
       <OurPolicy/>
       {/* <NewsletteBox/> */}
+        <ProductRating/>
 
     </div>
   )

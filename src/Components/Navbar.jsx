@@ -69,15 +69,7 @@ const Navbar = () => {
 
 
         </NavLink>
-        <NavLink to='/About' className='flex flex-col items-center gap-1'>
-          <p>
-            About
-          </p>
-          <hr className='w-2/4 border-none h-[1.5px] bg-gray-700 hidden' />
-
-
-        </NavLink>
-        <div 
+         <div 
           className='relative group'
           onMouseEnter={() => setShowMerchandiseDropdown(true)}
           onMouseLeave={() => setShowMerchandiseDropdown(false)}
@@ -118,6 +110,15 @@ const Navbar = () => {
             </div>
           )}
         </div>
+        <NavLink to='/About' className='flex flex-col items-center gap-1'>
+          <p>
+            About Us
+          </p>
+          <hr className='w-2/4 border-none h-[1.5px] bg-gray-700 hidden' />
+
+
+        </NavLink>
+       
         <NavLink to='/Contact' className='flex flex-col items-center gap-1'>
           <p>
             Contact

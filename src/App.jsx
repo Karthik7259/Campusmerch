@@ -15,6 +15,7 @@ const Cart = lazy(() => import('./pages/Cart'))
 const Login = lazy(() => import('./pages/Login'))
 const PlaceOrder = lazy(() => import('./pages/PlaceOrder'))
 const Orders = lazy(() => import('./pages/Orders'))
+const OrderDetails = lazy(() => import('./pages/OrderDetails'))
 const Verify = lazy(() => import('./pages/Verify'))
 const Accesories = lazy(() => import('./pages/Accesories'))
 const Stationery = lazy(() => import('./pages/stationery'))
@@ -74,6 +75,7 @@ const App = () => {
                  <Route path='/Login' element={<Login/>} />
                  <Route path='/place-order' element={<PlaceOrder/>} />
                  <Route path='/Orders' element={<Orders/>} />
+                 <Route path='/order/:orderId' element={<OrderDetails/>} />
                  <Route  path='/verify' element={<Verify/>} />
                  <Route path='/thank-you' element={<ThankYou/>} />
         </Routes>
