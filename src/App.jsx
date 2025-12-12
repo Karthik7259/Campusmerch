@@ -40,7 +40,7 @@ const LoadingFallback = () => (
 
 const App = () => {
   return (
-    <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] '>
+    <div className='flex flex-col min-h-screen'>
       <ToastContainer 
         position="top-right"
         autoClose={2000}
@@ -53,41 +53,46 @@ const App = () => {
         pauseOnHover={false}
         limit={1}
       />
-      <Navbar />
-      <Searchbar/>
-      <Suspense fallback={<LoadingFallback />}>
-        <Routes>
-                 <Route path='/' element={<Home />} />
-                 <Route path='/collection'  element={<Collection/>} />
-                 <Route path='/about' element={<About />} />
-                 <Route path='/contact' element={<Contact />} />
-                 <Route path='/CollegeMerchandise' element={<Collegemerchandise />} />
-                 <Route path='/product/:productId' element={<Product/>} />
-                  <Route path='/category/apparel' element={<Collection/>} />
-                 <Route path='/category/accessories' element={<Accesories/>} />
-                 <Route path='/category/stationery' element={<Stationery/>} />
-                 <Route path='/category/accessories' element={<Accesories/>} />
-                 <Route path='/category/tech-gadgets' element={<Techgadgets/>} />
-                 <Route path='/category/event-souvenir' element={<Eventsouvenir/>} />
-                 <Route path='/category/eco-friendly' element={<Ecofriendly/>} />
-                 <Route path='/category/gift-combos' element={<Giftcombos/>} />
-                 <Route path='/category/sports-fitness' element={<Sportsfitness/>} />
-                 <Route path='/category/lifestyle' element={<Lifestyle/>} />
-                
-                 <Route path='/cart' element={<Cart/>} />
-                 <Route path='/Login' element={<Login/>} />
-                 <Route path='/place-order' element={<PlaceOrder/>} />
-                 <Route path='/Orders' element={<Orders/>} />
-                 <Route path='/order/:orderId' element={<OrderDetails/>} />
-                 <Route  path='/verify' element={<Verify/>} />
-                 <Route path='/thank-you' element={<ThankYou/>} />
-                 <Route path='/privacy-policy' element={<PrivacyPolicy/>} />
-                 <Route path='/terms-and-conditions' element={<TermsConditions/>} />
-                 <Route path='/returns-refunds' element={<ReturnsRefunds/>} />
-        </Routes>
-      </Suspense>
-   <Footer />
-
+      <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
+        <Navbar />
+        <Searchbar/>
+      </div>
+      <div className='flex-grow px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+                   <Route path='/' element={<Home />} />
+                   <Route path='/collection'  element={<Collection/>} />
+                   <Route path='/about' element={<About />} />
+                   <Route path='/contact' element={<Contact />} />
+                   <Route path='/CollegeMerchandise' element={<Collegemerchandise />} />
+                   <Route path='/product/:productId' element={<Product/>} />
+                    <Route path='/category/apparel' element={<Collection/>} />
+                   <Route path='/category/accessories' element={<Accesories/>} />
+                   <Route path='/category/stationery' element={<Stationery/>} />
+                   <Route path='/category/accessories' element={<Accesories/>} />
+                   <Route path='/category/tech-gadgets' element={<Techgadgets/>} />
+                   <Route path='/category/event-souvenir' element={<Eventsouvenir/>} />
+                   <Route path='/category/eco-friendly' element={<Ecofriendly/>} />
+                   <Route path='/category/gift-combos' element={<Giftcombos/>} />
+                   <Route path='/category/sports-fitness' element={<Sportsfitness/>} />
+                   <Route path='/category/lifestyle' element={<Lifestyle/>} />
+                  
+                   <Route path='/cart' element={<Cart/>} />
+                   <Route path='/Login' element={<Login/>} />
+                   <Route path='/place-order' element={<PlaceOrder/>} />
+                   <Route path='/Orders' element={<Orders/>} />
+                   <Route path='/order/:orderId' element={<OrderDetails/>} />
+                   <Route  path='/verify' element={<Verify/>} />
+                   <Route path='/thank-you' element={<ThankYou/>} />
+                   <Route path='/privacy-policy' element={<PrivacyPolicy/>} />
+                   <Route path='/terms-and-conditions' element={<TermsConditions/>} />
+                   <Route path='/returns-refunds' element={<ReturnsRefunds/>} />
+          </Routes>
+        </Suspense>
+      </div>
+      <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
+        <Footer />
+      </div>
     </div>
   )
 }
