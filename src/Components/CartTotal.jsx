@@ -26,7 +26,7 @@ const CartTotal = ({ customShippingFee = null }) => {
            </div>
            {gstData.totalGST > 0 && (
                <div className='flex justify-between pb-2 border-b border-dashed border-gray-300'>
-                 <p>GST and Other Charges</p>
+                 <p>GST Charges</p>
                  <p>{currency}{gstData.totalGST.toFixed(2)}</p>
                </div>
            )}
