@@ -34,25 +34,40 @@ const ShopContextProvider=(props)=>{
             return;
           }
           
-          if(product.quantity === 0){
-            toast.error("⚠️ Out of Stock - This product is currently unavailable");
+          // If size is not provided (for non-clothing items), use 'default' as the size key
+          const sizeKey = size || 'default';
+          
+          // Determine available stock for this specific size or overall
+          let availableStock = 0;
+          if(product.sizeVariants && product.sizeVariants.length > 0){
+            // Has size-based pricing - check specific size stock
+            const sizeVariant = product.sizeVariants.find(v => v.size === sizeKey);
+            if(sizeVariant){
+              availableStock = sizeVariant.quantity || 0;
+            } else {
+              availableStock = 0;
+            }
+          } else {
+            // No size variants - use overall product stock
+            availableStock = product.quantity || 0;
+          }
+          
+          if(availableStock === 0){
+            toast.error(`⚠️ Out of Stock - ${sizeKey !== 'default' ? `Size ${sizeKey}` : 'This product'} is currently unavailable`);
             return;
           }
           
           let cartData=structuredClone(cartItems);
           
-          // If size is not provided (for non-clothing items), use 'default' as the size key
-          const sizeKey = size || 'default';
-          
-          // Calculate current quantity in cart for this item
+          // Calculate current quantity in cart for this item + size
           let currentQuantity = 0;
           if(cartData[itemId] && cartData[itemId][sizeKey]){
             currentQuantity = cartData[itemId][sizeKey];
           }
           
           // Check if adding one more would exceed available stock
-          if(currentQuantity >= product.quantity){
-            toast.error(`⚠️ No More Stock - Only ${product.quantity} ${product.quantity === 1 ? 'item' : 'items'} available`);
+          if(currentQuantity >= availableStock){
+            toast.error(`⚠️ No More Stock - Only ${availableStock} ${availableStock === 1 ? 'item' : 'items'} available for ${sizeKey !== 'default' ? `size ${sizeKey}` : 'this product'}`);
             return;
           }
           
@@ -126,9 +141,24 @@ try{
         return;
       }
       
+      // Determine available stock for this specific size or overall
+      let availableStock = 0;
+      if(product.sizeVariants && product.sizeVariants.length > 0){
+        // Has size-based pricing - check specific size stock
+        const sizeVariant = product.sizeVariants.find(v => v.size === size);
+        if(sizeVariant){
+          availableStock = sizeVariant.quantity || 0;
+        } else {
+          availableStock = 0;
+        }
+      } else {
+        // No size variants - use overall product stock
+        availableStock = product.quantity || 0;
+      }
+      
       // Validate quantity against available stock
-      if(quantity > product.quantity){
-        toast.error(`Only ${product.quantity} items available in stock`);
+      if(quantity > availableStock){
+        toast.error(`Only ${availableStock} items available in stock for ${size !== 'default' ? `size ${size}` : 'this product'}`);
         return;
       }
       
@@ -157,12 +187,23 @@ try{
       for(const items in cartItems){
       
            let itemInfo=products.find(product=>product._id===items);
+           
+           if(!itemInfo) continue;
                
       for(const item in cartItems[items]){
 
         try{
                if(cartItems[items][item]>0){
-                    totalAmount+=itemInfo.price * cartItems[items][item]; 
+                    // Check if product has size variants
+                    if(itemInfo.sizeVariants && itemInfo.sizeVariants.length > 0){
+                      // Use size-specific price
+                      const sizeVariant = itemInfo.sizeVariants.find(v => v.size === item);
+                      const price = sizeVariant ? sizeVariant.price : itemInfo.price;
+                      totalAmount += price * cartItems[items][item];
+                    } else {
+                      // Use regular price
+                      totalAmount += itemInfo.price * cartItems[items][item];
+                    }
                }
         }catch(err){
           console.log(err);
@@ -188,7 +229,18 @@ try{
       for(const item in cartItems[items]){
         try{
                if(cartItems[items][item]>0){
-                    const itemTotal = itemInfo.price * cartItems[items][item];
+                    // Check if product has size variants
+                    let itemTotal = 0;
+                    if(itemInfo.sizeVariants && itemInfo.sizeVariants.length > 0){
+                      // Use size-specific price
+                      const sizeVariant = itemInfo.sizeVariants.find(v => v.size === item);
+                      const price = sizeVariant ? sizeVariant.price : itemInfo.price;
+                      itemTotal = price * cartItems[items][item];
+                    } else {
+                      // Use regular price
+                      itemTotal = itemInfo.price * cartItems[items][item];
+                    }
+                    
                     if(itemInfo.category === 'Apparels'){
                       apparelAmount += itemTotal;
                     } else {

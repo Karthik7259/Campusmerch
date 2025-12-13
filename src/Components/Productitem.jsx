@@ -8,10 +8,10 @@ const Productitem = ({id,image,name,price,Mrpprice,quantity}) => {
  
 
   return (
-    <Link className='text-gray-700 cursor-pointer' to={`/product/${id}`}>
-      <div className='overflow-hidden relative'>
+    <Link className='text-gray-700 cursor-pointer flex flex-col h-full' to={`/product/${id}`}>
+      <div className='overflow-hidden relative aspect-square bg-gray-100'>
       
-      <img className='hover:scale-110 transition ease-in-out' src={image[0]} alt="" />
+      <img className='hover:scale-110 transition ease-in-out w-full h-full object-cover' src={image[0]} alt="" />
 
       {/* Sold Out Badge */}
       {quantity === 0 ? (
@@ -26,7 +26,7 @@ const Productitem = ({id,image,name,price,Mrpprice,quantity}) => {
 
       </div>
 
- <p className='pt-3 pb-1 text-sm'>{name}</p>
+ <p className='pt-3 pb-1 text-sm line-clamp-2 flex-grow'>{name}</p>
 
 {/* <p className='text-sm font-medium '>{currency}{price}</p>
 <p className='text-sm font-medium line-through text-gray-500'>{currency}{Mrpprice}</p> */}

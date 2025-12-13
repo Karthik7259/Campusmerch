@@ -32,7 +32,7 @@ const RelatedProduct = ({category,subCategory}) => {
 
 
 
-  }, [products]);
+  }, [products, category, subCategory]);
 
 
 

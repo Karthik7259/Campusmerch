@@ -19,6 +19,8 @@ const Collection = () => {
      const [availableColors,setAvailableColors]=useState([]);
      const [selectedBrands,setSelectedBrands]=useState([]);
      const [availableBrands,setAvailableBrands]=useState([]);
+     const [availableCategories,setAvailableCategories]=useState([]);
+     const [availableSubCategories,setAvailableSubCategories]=useState([]);
      const [sortType,setSortType]=useState('relavent');
 
      const toggleCategory=(e)=>{
@@ -145,9 +147,11 @@ const Collection = () => {
      },[sortType])
 
      useEffect(()=>{
-      // Extract unique colors from products
+      // Extract unique colors, brands, categories, and subcategories from products
       const colors = new Set();
       const brands = new Set();
+      const categories = new Set();
+      const subCategories = new Set();
       
       products.forEach(product => {
         if(product.color && product.color.trim() !== '' && 
@@ -166,10 +170,25 @@ const Collection = () => {
            product.collegeMerchandise && product.collegeMerchandise.trim() !== ''){
           brands.add(product.brand);
         }
+
+        // Extract categories (only from Apparels with college merchandise)
+        if(product.category === 'Apparels' && 
+           product.collegeMerchandise && product.collegeMerchandise.trim() !== ''){
+          categories.add(product.category);
+        }
+
+        // Extract subcategories (only from Apparels with college merchandise)
+        if(product.subCategory && product.subCategory.trim() !== '' && 
+           product.category === 'Apparels' && 
+           product.collegeMerchandise && product.collegeMerchandise.trim() !== ''){
+          subCategories.add(product.subCategory);
+        }
       });
       
       setAvailableColors(Array.from(colors).sort());
       setAvailableBrands(Array.from(brands).sort());
+      setAvailableCategories(Array.from(categories).sort());
+      setAvailableSubCategories(Array.from(subCategories).sort());
      },[products])
 
   return (
@@ -186,10 +205,16 @@ const Collection = () => {
 
                  <p className='mb-3 text-sm font-medium '>CATEGORIES</p>
                  <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
-                  <p className='flex gap-2'> 
-
-                   <input type="checkbox" className='w-3'  value={'Apparels'} onChange={toggleCategory} />Apparels
-                  </p>
+                  {availableCategories.length > 0 ? (
+                    availableCategories.map((cat, index) => (
+                      <p key={index} className='flex gap-2'> 
+                        <input type="checkbox" className='w-3' value={cat} onChange={toggleCategory} checked={category.includes(cat)} />
+                        {cat}
+                      </p>
+                    ))
+                  ) : (
+                    <p className='text-gray-400 text-xs'>No categories available</p>
+                  )}
                  </div>
 
             </div>
@@ -198,19 +223,16 @@ const Collection = () => {
 
                  <p className='mb-3 text-sm font-medium '>TYPE</p>
                  <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
-                  <p className='flex gap-2'> 
-
-                   <input type="checkbox" className='w-3'  value={'Men'}  onChange={toggleSubCategory} /> Men
-                  </p>
-                  <p className='flex gap-2'> 
-
-                   <input type="checkbox" className='w-3'  value={'Women'} onChange={toggleSubCategory} /> Women
-                  </p>
-                  <p className='flex gap-2'> 
-
-                   <input type="checkbox" className='w-3'  value={'Kids'} onChange={toggleSubCategory} /> Kids
-                  </p>
-                
+                  {availableSubCategories.length > 0 ? (
+                    availableSubCategories.map((subCat, index) => (
+                      <p key={index} className='flex gap-2'> 
+                        <input type="checkbox" className='w-3' value={subCat} onChange={toggleSubCategory} checked={subCategory.includes(subCat)} />
+                        {subCat}
+                      </p>
+                    ))
+                  ) : (
+                    <p className='text-gray-400 text-xs'>No types available</p>
+                  )}
                  </div>
             </div>
 

@@ -52,6 +52,20 @@ const cart = () => {
             cartData.map((item,index)=>
             {
                const productData=products.find((product)=>product._id===item._id);
+               
+               if(!productData) return null;
+               
+               // Get price for this specific size variant or use regular price
+               let itemPrice = productData.price;
+               let availableStock = productData.quantity || 0;
+               
+               if(productData.sizeVariants && productData.sizeVariants.length > 0){
+                 const sizeVariant = productData.sizeVariants.find(v => v.size === item.size);
+                 if(sizeVariant){
+                   itemPrice = sizeVariant.price;
+                   availableStock = sizeVariant.quantity;
+                 }
+               }
 
                return (
                  <div key={index} className='py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4'>
@@ -61,14 +75,32 @@ const cart = () => {
                               <div>
                                 <p className='text-xs sm:text-lg font-medium '>{productData.name}</p>
                                 <div className='flex items-center gap-5 mt-2 '>
-                                 <p>{currency}{productData.price}</p>
+                                 <p>{currency}{itemPrice}</p>
                                  <p className='px-2 sm:px-3 sm:py-1 border bg-slate-50 '>{item.size}</p>
                                 </div>
+                                {availableStock < 10 && availableStock > 0 && (
+                                  <p className='text-xs text-orange-600 mt-1'>Only {availableStock} left in stock</p>
+                                )}
+                                {availableStock === 0 && (
+                                  <p className='text-xs text-red-600 mt-1 font-semibold'>Out of stock</p>
+                                )}
                               </div>
                      </div>
                      <input 
-                     onChange={(e)=>e.target.value === ''|| e.target.value==='0' ? null :updateQuantity(item._id,item.size,Number(e.target.value))}
-                     className='border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1 ' type="number" min={1} defaultValue={item.quantity}/>
+                     onChange={(e)=>{
+                       const value = Number(e.target.value);
+                       if(e.target.value === '' || value === 0) return;
+                       if(value > availableStock){
+                         e.target.value = item.quantity;
+                         return;
+                       }
+                       updateQuantity(item._id,item.size,value);
+                     }}
+                     className='border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1 ' 
+                     type="number" 
+                     min={1} 
+                     max={availableStock}
+                     defaultValue={item.quantity}/>
                      <img 
                      onClick={()=>updateQuantity(item._id,item.size,0)}
                      className='w-4 mr-4 sm:w-5 cursor-pointer '

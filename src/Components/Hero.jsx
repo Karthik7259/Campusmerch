@@ -30,7 +30,7 @@ const Hero = () => {
       setCurrentIndex((prev) =>
         prev === slides.length - 1 ? 0 : prev + 1
       );
-    }, 2000); // 2 seconds
+    }, 4000); // 2 seconds
 
     return () => clearInterval(interval);
   }, []);

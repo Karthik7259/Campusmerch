@@ -17,6 +17,13 @@ const Product = () => {
    const [size,setSize] = useState('');
    
    const [activeTab, setActiveTab] = useState('mission');
+   
+   const [currentPrice, setCurrentPrice] = useState(0);
+   const [currentMrpPrice, setCurrentMrpPrice] = useState(0);
+   const [currentStock, setCurrentStock] = useState(0);
+   
+   // Check if product has size variants
+   const hasSizeVariants = productData && productData.sizeVariants && productData.sizeVariants.length > 0;
 
 const fetchProductData = async() => {
    
@@ -24,6 +31,19 @@ const fetchProductData = async() => {
      if(item._id === productId){
         setProductData(item);
         setImage(item.image[0]);
+        
+        // Set initial prices and stock
+        if (item.sizeVariants && item.sizeVariants.length > 0) {
+          // Has size variants - use first variant's pricing
+          setCurrentPrice(item.sizeVariants[0].price);
+          setCurrentMrpPrice(item.sizeVariants[0].mrpPrice);
+          setCurrentStock(item.sizeVariants[0].quantity);
+        } else {
+          // No size variants - use overall product pricing and stock
+          setCurrentPrice(item.price);
+          setCurrentMrpPrice(item.Mrpprice);
+          setCurrentStock(item.quantity || 0);
+        }
        
         return null;
      }
@@ -32,6 +52,8 @@ const fetchProductData = async() => {
 
 useEffect(() => {
     fetchProductData();
+    window.scrollTo(0, 0);
+    setSize('');
 }, [productId, products]);
 
   return productData ? (
@@ -67,17 +89,20 @@ useEffect(() => {
              <img src={assets.star_dull_icon} alt="" className="w-3 5" />
              <p className='pl-2 '>{122}</p>
       </div>
-       <p  className='mt-5 text-3xl font-medium'>{currency}{productData.price}</p>
-        <p className='text-sm text-gray-500 line-through '>M.R.P: {currency}{productData.Mrpprice}</p>
+       <p  className='mt-5 text-3xl font-medium'>{currency}{hasSizeVariants ? currentPrice : productData.price}</p>
+        <p className='text-sm text-gray-500 line-through '>M.R.P: {currency}{hasSizeVariants ? currentMrpPrice : productData.Mrpprice}</p>
+        {hasSizeVariants && !size && (
+          <p className='text-xs text-orange-600 mt-1'>* Price varies by size. Select a size to see final price.</p>
+        )}
       <p className='mt-5 text-gray-500 md:w'>{productData.description}</p>
       
       {/* Stock Status */}
-      {productData.quantity === 0 ? (
+      {(hasSizeVariants ? currentStock : (productData.quantity || 0)) === 0 ? (
         <div className='mt-5 mb-5'>
           <p className='text-red-600 font-bold text-lg'>SOLD OUT</p>
           <p className='text-sm text-gray-500'>This product is currently out of stock</p>
         </div>
-      ) : productData.quantity < 10 ? (
+      ) : (hasSizeVariants ? currentStock : (productData.quantity || 0)) < 10 ? (
         <div className='mt-5 mb-5'>
           <p className='text-orange-600 font-bold text-base animate-pulse'>⚡ HURRY! Limited stock available</p>
           <p className='text-sm text-gray-500'>Order now before it runs out!</p>
@@ -90,13 +115,43 @@ useEffect(() => {
       {productData.category === 'Apparels' && (
         <div className='flex flex-col gap-4 my-8'>
           <p>Select Size</p>
-          <div className='flex gap-2'>
+          <div className='flex gap-2 flex-wrap'>
             {
-              ['S', 'M', 'L', 'XL', 'XXL'].filter(size => productData.sizes && productData.sizes.includes(size)).map((item,index)=>(
-                 <button 
-                 onClick={()=>setSize(item)}
-                 className={`border py-2 px-4 bg-gray-100 ${size === item ? 'border-orange-500' : ''}`}key={index}>{item}</button>
-              ))
+              (hasSizeVariants ? productData.sizeVariants.map(v => v.size) : ['S', 'M', 'L', 'XL', 'XXL'].filter(s => productData.sizes && productData.sizes.includes(s))).map((item,index)=>{
+                const variant = hasSizeVariants ? productData.sizeVariants.find(v => v.size === item) : null;
+                // For size variants, check individual size stock; otherwise check overall stock
+                const isOutOfStock = hasSizeVariants ? (variant && variant.quantity === 0) : (productData.quantity === 0);
+                
+                return (
+                  <button 
+                    onClick={()=>{
+                      if (!isOutOfStock) {
+                        setSize(item);
+                        if (hasSizeVariants && variant) {
+                          // Use size variant pricing and stock
+                          setCurrentPrice(variant.price);
+                          setCurrentMrpPrice(variant.mrpPrice);
+                          setCurrentStock(variant.quantity);
+                        } else {
+                          // Use overall product pricing and stock
+                          setCurrentPrice(productData.price);
+                          setCurrentMrpPrice(productData.Mrpprice);
+                          setCurrentStock(productData.quantity || 0);
+                        }
+                      }
+                    }}
+                    disabled={isOutOfStock}
+                    className={`border py-2 px-4 bg-gray-100 ${size === item ? 'border-orange-500 bg-orange-50' : ''} ${isOutOfStock ? 'opacity-40 cursor-not-allowed line-through' : 'cursor-pointer hover:border-orange-300'} relative`}
+                    key={index}
+                  >
+                    {item}
+                    {hasSizeVariants && variant && (
+                      <span className='text-xs block text-gray-600'>{currency}{variant.price}</span>
+                    )}
+                    {isOutOfStock && <span className='absolute top-0 right-0 text-red-500 text-xs'>✕</span>}
+                  </button>
+                )
+              })
             }
           </div>
         </div>
@@ -104,12 +159,15 @@ useEffect(() => {
 
       <button 
         onClick={()=>{
+          // Determine the available stock (size variant or overall)
+          const availableStock = hasSizeVariants ? currentStock : (productData.quantity || 0);
+          
           // Check if item is already at stock limit in cart
           const sizeKey = productData.category === 'Apparels' ? size : 'default';
           const currentQuantityInCart = cartItems[productData._id]?.[sizeKey] || 0;
           
-          if(currentQuantityInCart >= productData.quantity) {
-            toast.error(`⚠️ No More Stock - Only ${productData.quantity} ${productData.quantity === 1 ? 'item' : 'items'} available`);
+          if(currentQuantityInCart >= availableStock) {
+            toast.error(`⚠️ No More Stock - Only ${availableStock} ${availableStock === 1 ? 'item' : 'items'} available`);
             return;
           }
           
@@ -121,32 +179,39 @@ useEffect(() => {
           addToCart(productData._id, productData.category === 'Apparels' ? size : 'default');
         }} 
         disabled={(() => {
+          // Determine the available stock (size variant or overall)
+          const availableStock = hasSizeVariants ? currentStock : (productData.quantity || 0);
+          
           // Check if product is out of stock OR if cart already has max quantity
-          if(productData.quantity === 0) return true;
+          if(availableStock === 0) return true;
           
           const sizeKey = productData.category === 'Apparels' ? size : 'default';
           const currentQuantityInCart = cartItems[productData._id]?.[sizeKey] || 0;
           
-          return currentQuantityInCart >= productData.quantity;
+          return currentQuantityInCart >= availableStock;
         })()}
         className={`px-8 py-3 text-sm ${(() => {
-          if(productData.quantity === 0) return 'bg-gray-400 cursor-not-allowed';
+          const availableStock = hasSizeVariants ? currentStock : (productData.quantity || 0);
+          
+          if(availableStock === 0) return 'bg-gray-400 cursor-not-allowed';
           
           const sizeKey = productData.category === 'Apparels' ? size : 'default';
           const currentQuantityInCart = cartItems[productData._id]?.[sizeKey] || 0;
           
-          if(currentQuantityInCart >= productData.quantity) return 'bg-gray-400 cursor-not-allowed';
+          if(currentQuantityInCart >= availableStock) return 'bg-gray-400 cursor-not-allowed';
           
           return 'bg-black active:bg-gray-700';
         })()} text-white`}
       >
         {(() => {
-          if(productData.quantity === 0) return 'Sold Out';
+          const availableStock = hasSizeVariants ? currentStock : (productData.quantity || 0);
+          
+          if(availableStock === 0) return 'Sold Out';
           
           const sizeKey = productData.category === 'Apparels' ? size : 'default';
           const currentQuantityInCart = cartItems[productData._id]?.[sizeKey] || 0;
           
-          if(currentQuantityInCart >= productData.quantity) return 'Out of Stock';
+          if(currentQuantityInCart >= availableStock) return 'Out of Stock';
           
           return 'Add to Cart';
         })()}

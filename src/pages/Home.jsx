@@ -14,7 +14,7 @@ import BrandMarquee from '../Components/BrandMarquee'
 const Home = () => {
   return (
     <div>
-      <div className='mx-1 sm:mx-2 md:mx-4 lg:mx-4'>
+      <div className='mx-1 sm:mx-2 md:mx-4 lg:mx-0.5'>
         <Hero/>
       </div>
       <CategoryShowcase/>

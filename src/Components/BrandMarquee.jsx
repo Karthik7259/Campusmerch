@@ -1,59 +1,66 @@
-import React from 'react'
+import React, { useState } from 'react'
+// Import local brand images
+import AdidasLogo from '../assets/brand/Adidas.png'
+import NikeLogo from '../assets/brand/Nike.png'
+import BoatLogo from '../assets/brand/boat.png'
+import DellLogo from '../assets/brand/dell.png'
+import HPLogo from '../assets/brand/hp.png'
+import JBLLogo from '../assets/brand/jbl.png'
+import AppleLogo from '../assets/brand/Apple.png'
+import WildcraftLogo from '../assets/brand/wildcraft.png'
+import PumaLogo from '../assets/brand/puma.png'
+import SamsungLogo from '../assets/brand/samsung.png'
+import SonyLogo from '../assets/brand/sony.png'
 
 const BrandMarquee = () => {
-  // Brand logos - using reliable CDN sources
-  const brands = [
-    { name: 'Adidas', logo: 'https://logo.clearbit.com/adidas.com' },
-    { name: 'Nike', logo: 'https://logo.clearbit.com/nike.com' },
-    { name: 'Puma', logo: 'https://logo.clearbit.com/puma.com' },
-    { name: 'Reebok', logo: 'https://logo.clearbit.com/reebok.com' },
-    { name: 'Sony', logo: 'https://logo.clearbit.com/sony.com' },
-    { name: 'JBL', logo: 'https://logo.clearbit.com/jbl.com' },
-    { name: 'boAt', logo: 'https://logo.clearbit.com/boat-lifestyle.com' },
-    { name: 'HP', logo: 'https://logo.clearbit.com/hp.com' },
-    { name: 'Dell', logo: 'https://logo.clearbit.com/dell.com' },
-    { name: 'Apple', logo: 'https://logo.clearbit.com/apple.com' },
-    { name: 'Samsung', logo: 'https://logo.clearbit.com/samsung.com' },
-    { name: 'LG', logo: 'https://logo.clearbit.com/lg.com' },
-    { name: 'Philips', logo: 'https://logo.clearbit.com/philips.com' },
-    { name: 'Canon', logo: 'https://logo.clearbit.com/canon.com' },
-    { name: 'Nikon', logo: 'https://logo.clearbit.com/nikon.com' },
-    { name: 'Titan', logo: 'https://logo.clearbit.com/titan.co.in' },
-    { name: 'Fastrack', logo: 'https://logo.clearbit.com/fastrack.in' },
-    { name: 'Fossil', logo: 'https://logo.clearbit.com/fossil.com' },
-    { name: 'Timex', logo: 'https://logo.clearbit.com/timex.com' },
-    { name: 'Casio', logo: 'https://logo.clearbit.com/casio.com' },
-    { name: 'Wildcraft', logo: 'https://logo.clearbit.com/wildcraft.com' },
-    { name: 'Decathlon', logo: 'https://logo.clearbit.com/decathlon.in' },
-    { name: 'Skybags', logo: 'https://logo.clearbit.com/skybags.co.in' },
-    { name: 'American Tourister', logo: 'https://logo.clearbit.com/americantourister.com' },
-    { name: 'Safari', logo: 'https://logo.clearbit.com/safari.co.in' },
-    { name: 'VIP', logo: 'https://logo.clearbit.com/vip.co.in' },
-    { name: 'Milton', logo: 'https://logo.clearbit.com/milton.in' },
-    { name: 'Tupperware', logo: 'https://logo.clearbit.com/tupperware.com' },
-    { name: 'Cello', logo: 'https://logo.clearbit.com/cello.world' },
-    { name: 'Prestige', logo: 'https://logo.clearbit.com/prestigesmartKitchen.com' },
-    { name: 'Hawkins', logo: 'https://logo.clearbit.com/hawkinscookers.com' },
-    { name: 'Pigeon', logo: 'https://logo.clearbit.com/pigeonindia.in' },
-    { name: 'Wonderchef', logo: 'https://logo.clearbit.com/wonderchef.com' },
-    { name: 'Havells', logo: 'https://logo.clearbit.com/havells.com' },
-    { name: 'Bajaj', logo: 'https://logo.clearbit.com/bajajelectricals.com' },
-    { name: 'Crompton', logo: 'https://logo.clearbit.com/crompton.co.in' },
-    { name: 'Syska', logo: 'https://logo.clearbit.com/syska.co.in' },
-    { name: 'Usha', logo: 'https://logo.clearbit.com/usha.com' },
-    { name: 'Orient', logo: 'https://logo.clearbit.com/orientelectric.com' },
-    { name: 'Voltas', logo: 'https://logo.clearbit.com/voltasbeko.com' },
-    { name: 'Blue Star', logo: 'https://logo.clearbit.com/bluestarindia.com' },
-    { name: 'Godrej', logo: 'https://logo.clearbit.com/godrej.com' },
-    { name: 'Whirlpool', logo: 'https://logo.clearbit.com/whirlpool.com' },
-    { name: 'Bosch', logo: 'https://logo.clearbit.com/bosch-home.com' },
-    { name: 'IFB', logo: 'https://logo.clearbit.com/ifbappliances.com' },
-    { name: 'Kent', logo: 'https://logo.clearbit.com/kent.co.in' },
-    { name: 'Eureka Forbes', logo: 'https://logo.clearbit.com/eurekaforbes.com' },
-    { name: 'Livpure', logo: 'https://logo.clearbit.com/livpure.com' },
-    { name: 'Aquaguard', logo: 'https://logo.clearbit.com/aquaguard.co.in' },
-    { name: 'Pureit', logo: 'https://logo.clearbit.com/pureitwater.com' },
-  ]
+  const [imageErrors, setImageErrors] = useState({});
+
+  // Brand logos - using local images where available, CDN links for others
+const brands = [
+  { name: 'Adidas', logo: AdidasLogo },
+  { name: 'Nike', logo: NikeLogo },
+  { name: 'Puma', logo: PumaLogo },
+  { name: 'Reebok', logo: 'https://upload.wikimedia.org/wikipedia/commons/5/53/Reebok_2019_logo.svg' },
+
+  { name: 'Sony', logo: SonyLogo },
+  { name: 'JBL', logo: JBLLogo },
+  { name: 'boAt', logo: BoatLogo },
+
+  { name: 'HP', logo: HPLogo },
+  { name: 'Dell', logo: DellLogo },
+  { name: 'Apple', logo: AppleLogo },
+  { name: 'Samsung', logo: SamsungLogo },
+  { name: 'LG', logo: 'https://upload.wikimedia.org/wikipedia/commons/2/20/LG_Logo.svg' },
+
+  { name: 'Philips', logo: 'https://upload.wikimedia.org/wikipedia/commons/5/52/Philips_logo.svg' },
+  { name: 'Canon', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/0c/Canon_wordmark.svg' },
+  { name: 'Nikon', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4d/Nikon_logo.svg' },
+
+  { name: 'Titan', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Titan_Company_Logo.svg' },
+  { name: 'Fastrack', logo: 'https://upload.wikimedia.org/wikipedia/commons/2/25/Fastrack_logo.svg' },
+  { name: 'Fossil', logo: 'https://upload.wikimedia.org/wikipedia/commons/8/89/Fossil_logo.svg' },
+  { name: 'Timex', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/3f/Timex_logo.svg' },
+  { name: 'Casio', logo: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Casio_logo.svg' },
+
+  { name: 'Wildcraft', logo: WildcraftLogo },
+  { name: 'Decathlon', logo: 'https://upload.wikimedia.org/wikipedia/commons/7/71/Decathlon_Logo.svg' },
+
+  { name: 'American Tourister', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/9c/American_Tourister_logo.svg' },
+  { name: 'VIP', logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2a/VIP_Industries_logo.svg' },
+
+  { name: 'Tupperware', logo: 'https://upload.wikimedia.org/wikipedia/commons/5/58/Tupperware_Logo.svg' },
+  { name: 'Prestige', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4f/Prestige_Group_logo.svg' },
+  { name: 'Hawkins', logo: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Hawkins_Cookers_logo.svg' },
+
+  { name: 'Havells', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4b/Havells_Logo.svg' },
+  { name: 'Bajaj', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/3e/Bajaj_Electricals_Logo.svg' },
+  { name: 'Crompton', logo: 'https://upload.wikimedia.org/wikipedia/commons/1/1b/Crompton_Greaves_logo.svg' },
+
+  { name: 'Godrej', logo: 'https://upload.wikimedia.org/wikipedia/commons/5/57/Godrej_Logo.svg' },
+  { name: 'Whirlpool', logo: 'https://upload.wikimedia.org/wikipedia/commons/5/5f/Whirlpool_Corporation_logo.svg' },
+  { name: 'Bosch', logo: 'https://upload.wikimedia.org/wikipedia/commons/1/16/Bosch-logo.svg' },
+  { name: 'IFB', logo: 'https://upload.wikimedia.org/wikipedia/commons/2/29/IFB_Industries_logo.svg' }
+];
 
   // Duplicate brands for seamless loop
   const duplicatedBrands = [...brands, ...brands, ...brands]
@@ -91,15 +98,18 @@ const BrandMarquee = () => {
                   className='marquee-item flex-shrink-0 mx-8 group'
                 >
                   <div className='bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 border border-gray-100 w-40 h-28 flex items-center justify-center'>
-                    <img
-                      src={brand.logo}
-                      alt={brand.name}
-                      className='max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 opacity-70 group-hover:opacity-100'
-                      onError={(e) => {
-                        e.target.style.display = 'none'
-                        e.target.parentElement.innerHTML = `<div class="text-gray-600 font-semibold text-lg">${brand.name}</div>`
-                      }}
-                    />
+                    {!imageErrors[`${brand.name}-${index}`] ? (
+                      <img
+                        src={brand.logo}
+                        alt={brand.name}
+                        className='max-w-full max-h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300 opacity-70 group-hover:opacity-100'
+                        onError={() => {
+                          setImageErrors(prev => ({ ...prev, [`${brand.name}-${index}`]: true }));
+                        }}
+                      />
+                    ) : (
+                      <div className='text-gray-400 text-sm font-medium'>{brand.name}</div>
+                    )}
                   </div>
                 </div>
               ))}
