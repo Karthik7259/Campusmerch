@@ -64,15 +64,14 @@ const Navbar = () => {
   }
 
   return (
-    <header className="sticky top-0 z-[50] bg-brand-off-white">
+    <header className="sticky top-0 z-[50] bg-gradient-to-r from-slate-900 via-gray-900 to-black">
       <div
-        className={`transition-all duration-300 ${
-          isScrolled ? 'border-b border-border-light shadow-sm' : 'border-b border-transparent'
-        }`}
+        className={`transition-all duration-300 ${isScrolled ? 'border-b border-white/10 shadow-lg shadow-black/20' : 'border-b border-transparent'
+          }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-16 md:h-[72px] flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 h-20 md:h-24 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img src={assets.logo} className="h-8 md:h-10 w-auto" alt="Gift4corp" />
+            <img src={assets.logo} className="h-14 md:h-20 w-auto brightness-0 invert" alt="Gift4corp" />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-8">
@@ -87,8 +86,7 @@ const Navbar = () => {
                   <NavLink
                     to={item.path}
                     className={({ isActive }) =>
-                      `text-nav text-text-secondary uppercase tracking-[0.2em] transition ${
-                        isActive ? 'text-text-primary' : 'hover:text-text-primary'
+                      `text-nav text-white/70 uppercase tracking-[0.2em] transition ${isActive ? 'text-white' : 'hover:text-white'
                       }`
                     }
                   >
@@ -129,8 +127,7 @@ const Navbar = () => {
                   key={item.label}
                   to={item.path}
                   className={({ isActive }) =>
-                    `text-nav text-text-secondary uppercase tracking-[0.2em] transition ${
-                      isActive ? 'text-text-primary' : 'hover:text-text-primary'
+                    `text-nav text-white/70 uppercase tracking-[0.2em] transition ${isActive ? 'text-white' : 'hover:text-white'
                     }`
                   }
                 >
@@ -144,7 +141,7 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => setShowSearch(true)}
-              className="h-10 w-10 flex items-center justify-center border border-border-light hover:border-border-dark transition"
+              className="h-10 w-10 flex items-center justify-center border border-white/20 hover:border-white/50 hover:bg-white/10 transition text-white"
               aria-label="Open search"
             >
               <Search className="h-4 w-4" />
@@ -154,7 +151,7 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={() => (token ? null : navigate('/login'))}
-                className="h-10 w-10 flex items-center justify-center border border-border-light hover:border-border-dark transition"
+                className="h-10 w-10 flex items-center justify-center border border-white/20 hover:border-white/50 hover:bg-white/10 transition text-white"
                 aria-label="Account"
               >
                 <User className="h-4 w-4" />
@@ -189,11 +186,11 @@ const Navbar = () => {
 
             <Link
               to="/cart"
-              className="relative h-10 w-10 flex items-center justify-center border border-border-light hover:border-border-dark transition"
+              className="relative h-10 w-10 flex items-center justify-center border border-white/20 hover:border-white/50 hover:bg-white/10 transition text-white"
               aria-label="Cart"
             >
               <ShoppingBag className="h-4 w-4" />
-              <span className="absolute -bottom-2 -right-2 h-5 w-5 rounded-full bg-brand-black text-brand-white text-[10px] flex items-center justify-center">
+              <span className="absolute -bottom-2 -right-2 h-5 w-5 rounded-full bg-orange-500 text-white text-[10px] flex items-center justify-center">
                 {getCartCount()}
               </span>
             </Link>
@@ -201,7 +198,7 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => setVisible(true)}
-              className="h-10 w-10 flex items-center justify-center border border-border-light hover:border-border-dark transition lg:hidden"
+              className="h-10 w-10 flex items-center justify-center border border-white/20 hover:border-white/50 hover:bg-white/10 transition lg:hidden text-white"
               aria-label="Open menu"
             >
               <Menu className="h-4 w-4" />
@@ -230,8 +227,7 @@ const Navbar = () => {
                   key={item.label}
                   onClick={() => setVisible(false)}
                   className={({ isActive }) =>
-                    `text-sm uppercase tracking-[0.2em] pb-3 border-b border-border-light ${
-                      isActive ? 'text-text-primary' : 'text-text-secondary'
+                    `text-sm uppercase tracking-[0.2em] pb-3 border-b border-border-light ${isActive ? 'text-text-primary' : 'text-text-secondary'
                     }`
                   }
                   to={item.path}

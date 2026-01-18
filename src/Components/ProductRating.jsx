@@ -43,8 +43,11 @@ const ProductRating = () => {
   const canNext = index < reviews.length - 2
 
   return (
-    <section className="py-16 bg-brand-black text-brand-white">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+    <section className="relative py-16 bg-gradient-to-br from-slate-900 via-gray-900 to-black text-brand-white overflow-hidden">
+      {/* Subtle Accent Glow */}
+      <div className="absolute top-1/4 -left-20 w-72 h-72 bg-orange-500/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl" />
+      <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-8">
           <div className="max-w-xl">
             <p className="text-caption text-white/60">Testimonials</p>
@@ -80,7 +83,7 @@ const ProductRating = () => {
             <div key={review.id} className="border border-white/10 p-6 bg-white/5">
               <div className="flex items-center gap-2">
                 {[...Array(review.rating)].map((_, i) => (
-                  <Star key={`${review.id}-star-${i}`} className="h-4 w-4 text-accent" />
+                  <Star key={`${review.id}-star-${i}`} className="h-4 w-4 text-accent fill-accent" />
                 ))}
               </div>
               <p className="mt-4 text-sm text-white/80">"{review.comment}"</p>

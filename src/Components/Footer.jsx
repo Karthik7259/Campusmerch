@@ -5,11 +5,15 @@ import { assets } from '../assets/assets'
 
 const Footer = () => {
   return (
-    <footer className="bg-brand-black text-brand-white">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-14">
+    <footer className="relative bg-gradient-to-br from-slate-900 via-gray-900 to-black text-brand-white overflow-hidden">
+      {/* Subtle Accent Glow */}
+      <div className="absolute top-1/4 -right-20 w-72 h-72 bg-orange-500/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl" />
+
+      <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-14">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-2">
-            <img src={assets.logo} className="h-10 w-auto mb-4" alt="Gift4corp" />
+            <img src={assets.logo} className="h-10 w-auto mb-4 brightness-0 invert" alt="Gift4corp" />
             <p className="text-sm text-white/70 leading-relaxed max-w-md">
               Gift4corp delivers premium corporate gifting and branded merchandise
               with a refined, end-to-end experience for teams and enterprises.

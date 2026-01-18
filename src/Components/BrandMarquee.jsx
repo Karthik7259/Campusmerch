@@ -52,12 +52,12 @@ const BrandMarquee = () => {
           {duplicated.map((brand, index) => (
             <div
               key={`${brand.name}-${index}`}
-              className="h-16 w-32 flex-shrink-0 flex items-center justify-center"
+              className="h-16 w-40 flex-shrink-0 flex items-center justify-center"
             >
               <img
                 src={brand.logo}
                 alt={brand.name}
-                className="max-h-10 max-w-full object-contain opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition duration-300"
+                className="max-h-14 max-w-full object-contain opacity-80 hover:opacity-100 transition duration-300"
               />
             </div>
           ))}
