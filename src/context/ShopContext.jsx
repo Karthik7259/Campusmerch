@@ -11,12 +11,21 @@ export const ShopContext = createContext();
 
 /** Ensure cart is { [productId]: { [size]: positive number } } — avoids for..in bugs on bad API shapes */
 const normalizeCartData = (raw) => {
-  if (raw == null || typeof raw !== 'object' || Array.isArray(raw)) return {};
+  let data = raw;
+  if (typeof raw === 'string') {
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      return {};
+    }
+  }
+  if (data == null || typeof data !== 'object' || Array.isArray(data)) return {};
   const out = {};
-  for (const [productId, entry] of Object.entries(raw)) {
+  for (const [productId, entry] of Object.entries(data)) {
     if (entry == null || typeof entry !== 'object' || Array.isArray(entry)) continue;
     const sizes = {};
     for (const [size, qty] of Object.entries(entry)) {
+      if (typeof qty === 'boolean') continue;
       const n = Number(qty);
       if (!Number.isFinite(n) || n <= 0) continue;
       sizes[size] = n;
@@ -129,14 +138,23 @@ const ShopContextProvider = (props) => {
 
 
 
+  /**
+   * Badge count should match what the Cart page can show: skip orphan IDs (deleted / wrong DB)
+   * once the catalog has loaded. Until then, use raw totals so a real cart still shows while products fetch.
+   */
   const getCartCount = () => {
     if (cartItems == null || typeof cartItems !== 'object' || Array.isArray(cartItems)) return 0;
     let totalCount = 0;
     for (const productId of Object.keys(cartItems)) {
       const sizes = cartItems[productId];
       if (sizes == null || typeof sizes !== 'object' || Array.isArray(sizes)) continue;
+      if (products.length > 0) {
+        const product = products.find((p) => String(p._id) === String(productId));
+        if (!product) continue;
+      }
       for (const size of Object.keys(sizes)) {
         const qty = sizes[size];
+        if (typeof qty === 'boolean') continue;
         const n = Number(qty);
         if (Number.isFinite(n) && n > 0) totalCount += n;
       }
@@ -309,11 +327,14 @@ const ShopContextProvider = (props) => {
         const data = response.data;
         if (data.success) {
           setCartItems(normalizeCartData(data.cartData));
+        } else {
+          setCartItems({});
         }
 
       } catch (err) {
         console.log(err);
         toast.error("Error in fetching cart data");
+        setCartItems({});
       }
     }
   }
