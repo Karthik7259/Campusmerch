@@ -7,8 +7,7 @@ import Title from '../Components/Title'
 import Productitem from '../Components/Productitem'
 
 const Collegemerchandise = () => {
-  const { products, search, showSearch } = useContext(ShopContext)
-  const backendURL = import.meta.env.VITE_BACKEND_URL
+  const { products, search, showSearch, backendURL } = useContext(ShopContext)
   const [searchParams] = useSearchParams()
   const [showFilter, setShowFilter] = useState(false)
   const [filteredProducts, setFilteredProducts] = useState([])
@@ -24,13 +23,16 @@ const Collegemerchandise = () => {
     try {
       const response = await axios.get(`${backendURL}/api/college-merchandise/list`)
       if (response.data.success) {
-        const filteredList = response.data.merchandises.filter(
+        const raw = Array.isArray(response.data.merchandises) ? response.data.merchandises : []
+        /* Match API: treat missing isActive as active (legacy docs); only hide soft-deleted */
+        const filteredList = raw.filter(
           (item) =>
-            item.isActive &&
+            item.isActive !== false &&
             item.name &&
             item.name.trim() !== '' &&
             item.name.toLowerCase() !== 'none'
         )
+        console.log('Merchandise List:', filteredList)
         setMerchandiseList(filteredList)
       }
     } catch (error) {

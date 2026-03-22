@@ -10,15 +10,15 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [merchandiseList, setMerchandiseList] = useState([])
   const [showMerchandiseDropdown, setShowMerchandiseDropdown] = useState(false)
-  const { setShowSearch, getCartCount, navigate, token, setToken, setCartItems } =
+  const { setShowSearch, getCartCount, navigate, token, setToken, setCartItems, backendURL } =
     useContext(ShopContext)
-  const backendURL = import.meta.env.VITE_BACKEND_URL
+  const cartCount = getCartCount()
 
   const navItems = useMemo(
     () => [
       { label: 'Home', path: '/' },
       { label: 'Collection', path: '/collection' },
-      { label: 'College Merchandise', path: '/CollegeMerchandise', hasDropdown: true },
+      { label: 'Merchandise', path: '/CollegeMerchandise', hasDropdown: true },
       { label: 'About', path: '/about' },
       { label: 'Contact', path: '/contact' },
     ],
@@ -29,9 +29,10 @@ const Navbar = () => {
     try {
       const response = await axios.get(`${backendURL}/api/college-merchandise/list`)
       if (response.data.success) {
-        const filteredList = response.data.merchandises.filter(
+        const raw = Array.isArray(response.data.merchandises) ? response.data.merchandises : []
+        const filteredList = raw.filter(
           (item) =>
-            item.isActive &&
+            item.isActive !== false &&
             item.name &&
             item.name.trim() !== '' &&
             item.name.toLowerCase() !== 'none'
@@ -187,12 +188,14 @@ const Navbar = () => {
             <Link
               to="/cart"
               className="relative h-10 w-10 flex items-center justify-center border border-white/20 hover:border-white/50 hover:bg-white/10 transition text-white"
-              aria-label="Cart"
+              aria-label={cartCount > 0 ? `Cart, ${cartCount} items` : 'Cart'}
             >
               <ShoppingBag className="h-4 w-4" />
-              <span className="absolute -bottom-2 -right-2 h-5 w-5 rounded-full bg-orange-500 text-white text-[10px] flex items-center justify-center">
-                {getCartCount()}
-              </span>
+              {cartCount > 0 && (
+                <span className="absolute -bottom-2 -right-2 min-h-5 min-w-5 px-1 rounded-full bg-orange-500 text-white text-[10px] font-semibold flex items-center justify-center tabular-nums">
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
+              )}
             </Link>
 
             <button

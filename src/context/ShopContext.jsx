@@ -9,6 +9,22 @@ import axios from "axios";
 
 export const ShopContext = createContext();
 
+/** Ensure cart is { [productId]: { [size]: positive number } } — avoids for..in bugs on bad API shapes */
+const normalizeCartData = (raw) => {
+  if (raw == null || typeof raw !== 'object' || Array.isArray(raw)) return {};
+  const out = {};
+  for (const [productId, entry] of Object.entries(raw)) {
+    if (entry == null || typeof entry !== 'object' || Array.isArray(entry)) continue;
+    const sizes = {};
+    for (const [size, qty] of Object.entries(entry)) {
+      const n = Number(qty);
+      if (!Number.isFinite(n) || n <= 0) continue;
+      sizes[size] = n;
+    }
+    if (Object.keys(sizes).length > 0) out[productId] = sizes;
+  }
+  return out;
+};
 
 const ShopContextProvider = (props) => {
 
@@ -114,23 +130,19 @@ const ShopContextProvider = (props) => {
 
 
   const getCartCount = () => {
+    if (cartItems == null || typeof cartItems !== 'object' || Array.isArray(cartItems)) return 0;
     let totalCount = 0;
-    for (const items in cartItems) {
-      for (const item in cartItems[items]) {
-        try {
-          if (cartItems[items][item] > 0) {
-            totalCount += cartItems[items][item];
-
-          }
-        } catch (err) {
-          console.log(err);
-        }
+    for (const productId of Object.keys(cartItems)) {
+      const sizes = cartItems[productId];
+      if (sizes == null || typeof sizes !== 'object' || Array.isArray(sizes)) continue;
+      for (const size of Object.keys(sizes)) {
+        const qty = sizes[size];
+        const n = Number(qty);
+        if (Number.isFinite(n) && n > 0) totalCount += n;
       }
     }
-
-
     return totalCount;
-  }
+  };
 
 
   const updateQuantity = async (itemId, size, quantity) => {
@@ -296,7 +308,7 @@ const ShopContextProvider = (props) => {
         const response = await axios.post(backendURL + '/api/cart/get', {}, { headers: { token } });
         const data = response.data;
         if (data.success) {
-          setCartItems(data.cartData);
+          setCartItems(normalizeCartData(data.cartData));
         }
 
       } catch (err) {
@@ -313,14 +325,16 @@ const ShopContextProvider = (props) => {
 
 
   useEffect(() => {
-
     if (!token && localStorage.getItem('token')) {
       setToken(localStorage.getItem('token'));
-      getUserCart(localStorage.getItem('token'));
-
     }
-
   }, [])
+
+  useEffect(() => {
+    if (token) {
+      getUserCart(token);
+    }
+  }, [token])
 
   const value = {
     products,
