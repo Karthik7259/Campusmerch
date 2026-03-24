@@ -17,8 +17,10 @@ const PincodeChecker = ({ productWeight = 0.5, onServiceabilityCheck = null }) =
 
     setChecking(true)
     try {
+      const pickupPostcode =
+        import.meta.env.VITE_SHIPROCKET_PICKUP_POSTCODE || '560018'
       const response = await axios.post(`${backendURL}/api/shipping/check-serviceability`, {
-        pickup_postcode: '560070',
+        pickup_postcode: pickupPostcode,
         delivery_postcode: pincode,
         weight: productWeight,
         cod: 1,

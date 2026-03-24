@@ -2,10 +2,10 @@ import React from 'react'
 
 const AnnouncementBar = () => {
   const messages = [
-    'FREE SHIPPING ON ORDERS OVER INR 2000',
-    'SAVE 10% WITH CODE CORPORATE10',
-    'BULK ORDERS? CALL +91 9620044401',
+   
     'PAN-INDIA DELIVERY AVAILABLE',
+    'BULK ORDERS? CALL +91 9620044401',
+    'For Any Queries, Contact Us At +91 9620044401',
   ]
 
   return (

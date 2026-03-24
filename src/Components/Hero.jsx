@@ -81,7 +81,7 @@ const Hero = () => {
               to="/contact"
               className="px-8 py-3.5 text-button text-white rounded-full border border-white/20 hover:border-white/50 hover:bg-white/10 backdrop-blur-sm transition-all duration-300 text-center font-medium"
             >
-              Start a Project
+              Start a Conversation
             </Link>
           </div>
 

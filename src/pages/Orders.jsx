@@ -7,6 +7,12 @@ import axios from 'axios';
 import TrackingModal from '../Components/TrackingModal';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { assets } from '../assets/assets';
+
+function orderItemImageSrc(item) {
+  if (!item?.image) return assets.logo;
+  return Array.isArray(item.image) ? item.image[0] : item.image;
+}
 
 const Orders = () => {
 
@@ -35,6 +41,7 @@ const Orders = () => {
 
         }catch(err){
             console.log(err);
+            toast.error(err.response?.data?.error || err.response?.data?.message || 'Could not load orders');
         }
   }
 
@@ -65,8 +72,11 @@ const Orders = () => {
 
 
   const calculateOrderTotal = (order) => {
-    const subtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    return subtotal;
+    const items = order.items || [];
+    return items.reduce(
+      (sum, item) => sum + (Number(item.price) || 0) * (Number(item.quantity) || 0),
+      0
+    );
   }
 
   return (
@@ -87,9 +97,11 @@ const Orders = () => {
         </div>
       ) : (
         <div className='space-y-4'>
-          {orderData.map((order, index) => (
+          {orderData.map((order, index) => {
+            const lineItems = order.items || [];
+            return (
             <div 
-              key={index} 
+              key={order._id || index} 
               onClick={() => navigateRouter(`/order/${order._id}`)}
               className='border rounded-lg p-6 hover:shadow-lg transition-all cursor-pointer bg-white'
             >
@@ -123,11 +135,11 @@ const Orders = () => {
 
               {/* Order Items */}
               <div className='space-y-3'>
-                {order.items.slice(0, 2).map((item, itemIndex) => (
+                {lineItems.slice(0, 2).map((item, itemIndex) => (
                   <div key={itemIndex} className='flex items-center gap-4'>
                     <img 
-                      src={item.image[0]} 
-                      alt={item.name}
+                      src={orderItemImageSrc(item)} 
+                      alt={item.name || 'Product'}
                       className='w-16 h-16 object-cover rounded border'
                     />
                     <div className='flex-1'>
@@ -139,9 +151,9 @@ const Orders = () => {
                     <p className='font-medium text-gray-800'>{currency}{item.price}</p>
                   </div>
                 ))}
-                {order.items.length > 2 && (
+                {lineItems.length > 2 && (
                   <p className='text-sm text-gray-500 pl-20'>
-                    +{order.items.length - 2} more item{order.items.length - 2 > 1 ? 's' : ''}
+                    +{lineItems.length - 2} more item{lineItems.length - 2 > 1 ? 's' : ''}
                   </p>
                 )}
               </div>
@@ -170,7 +182,8 @@ const Orders = () => {
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

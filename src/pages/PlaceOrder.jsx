@@ -75,8 +75,10 @@ const PlaceOrder = () => {
 
       totalWeight = Math.max(totalWeight, 0.5)
 
+      const pickupPostcode =
+        import.meta.env.VITE_SHIPROCKET_PICKUP_POSTCODE || '560018'
       const response = await axios.post(`${backendURL}/api/shipping/check-serviceability`, {
-        pickup_postcode: '560070',
+        pickup_postcode: pickupPostcode,
         delivery_postcode: formData.zipcode,
         weight: totalWeight,
         cod: 0,
@@ -224,12 +226,18 @@ const PlaceOrder = () => {
                   : itemInfo.Mrpprice
 
               orderItems.push({
+                _id: items,
                 productId: items,
                 name: itemInfo.name,
+                category: itemInfo.category,
                 price: itemPrice,
                 mrpPrice: itemMrpPrice,
                 quantity: cartItems[items][item],
                 size: item,
+                weight: itemInfo.weight,
+                length: itemInfo.length,
+                breadth: itemInfo.breadth,
+                height: itemInfo.height,
               })
             }
           }

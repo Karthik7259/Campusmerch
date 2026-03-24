@@ -4,6 +4,12 @@ import { ShopContext } from '../context/ShopContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import TrackingModal from '../Components/TrackingModal';
+import { assets } from '../assets/assets';
+
+function orderItemImageSrc(item) {
+  if (!item?.image) return assets.logo;
+  return Array.isArray(item.image) ? item.image[0] : item.image;
+}
 
 const OrderDetails = () => {
   const { orderId } = useParams();
@@ -72,14 +78,18 @@ const OrderDetails = () => {
   };
 
   const calculateSubtotal = () => {
-    return order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const items = order.items || [];
+    return items.reduce(
+      (sum, item) => sum + (Number(item.price) || 0) * (Number(item.quantity) || 0),
+      0
+    );
   };
 
   const calculateGST = () => {
     let apparelAmount = 0;
     let otherAmount = 0;
 
-    order.items.forEach(item => {
+    (order.items || []).forEach(item => {
       const itemTotal = item.price * item.quantity;
       if (item.category === 'Apparels') {
         apparelAmount += itemTotal;
@@ -187,11 +197,11 @@ const OrderDetails = () => {
           <div className='bg-white rounded-lg shadow-sm p-6'>
             <h2 className='text-xl font-semibold mb-4'>Order Items</h2>
             <div className='space-y-4'>
-              {order.items.map((item, index) => (
+              {(order.items || []).map((item, index) => (
                 <div key={index} className='flex gap-4 p-4 border rounded hover:bg-gray-50 transition-all'>
                   <img
-                    src={item.image[0]}
-                    alt={item.name}
+                    src={orderItemImageSrc(item)}
+                    alt={item.name || 'Product'}
                     className='w-20 h-20 object-cover rounded border'
                   />
                   <div className='flex-1'>
@@ -217,7 +227,7 @@ const OrderDetails = () => {
             <h2 className='text-xl font-semibold mb-4'>Order Summary</h2>
             <div className='space-y-3'>
               <div className='flex justify-between text-gray-600'>
-                <span>Subtotal ({order.items.length} items)</span>
+                <span>Subtotal ({(order.items || []).length} items)</span>
                 <span>{currency}{calculateSubtotal()}</span>
               </div>
               
