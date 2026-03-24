@@ -71,14 +71,6 @@ const Orders = () => {
   },[token]);
 
 
-  const calculateOrderTotal = (order) => {
-    const items = order.items || [];
-    return items.reduce(
-      (sum, item) => sum + (Number(item.price) || 0) * (Number(item.quantity) || 0),
-      0
-    );
-  }
-
   return (
     <div className='border-t pt-16 pb-16 px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
       <div className='text-2xl mb-8'>
@@ -121,7 +113,7 @@ const Orders = () => {
                 </div>
                 <div>
                   <p className='text-sm text-gray-500'>Total Amount</p>
-                  <p className='font-semibold text-lg text-gray-800'>{currency}{calculateOrderTotal(order)}</p>
+                  <p className='font-semibold text-lg text-gray-800'>{currency}{order.amount}</p>
                 </div>
                 <div className='flex items-center gap-2'>
                   <div className={`w-2 h-2 rounded-full ${

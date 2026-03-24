@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import TrackingModal from '../Components/TrackingModal';
 import { assets } from '../assets/assets';
+import { isApparelCategory } from '../utils/gst';
 
 function orderItemImageSrc(item) {
   if (!item?.image) return assets.logo;
@@ -91,7 +92,7 @@ const OrderDetails = () => {
 
     (order.items || []).forEach(item => {
       const itemTotal = item.price * item.quantity;
-      if (item.category === 'Apparels') {
+      if (isApparelCategory(item.category)) {
         apparelAmount += itemTotal;
       } else {
         otherAmount += itemTotal;
@@ -135,6 +136,11 @@ const OrderDetails = () => {
       </div>
     );
   }
+
+  const gstData = calculateGST();
+  const hasApparelGst = gstData.apparelGST > 0;
+  const hasOtherGst = gstData.otherGST > 0;
+  const showGstSplit = hasApparelGst && hasOtherGst;
 
   return (
     <div className='min-h-screen bg-gray-50 py-8 px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
@@ -231,25 +237,32 @@ const OrderDetails = () => {
                 <span>{currency}{calculateSubtotal()}</span>
               </div>
               
-              {/* GST Breakdown */}
-              {calculateGST().apparelGST > 0 && (
-                <div className='flex justify-between text-gray-600 text-sm'>
-                  <span className='pl-4'>GST on Apparels (5%)</span>
-                  <span>{currency}{calculateGST().apparelGST}</span>
-                </div>
-              )}
-              {calculateGST().otherGST > 0 && (
-                <div className='flex justify-between text-gray-600 text-sm'>
-                  <span className='pl-4'>GST on Other Items (18%)</span>
-                  <span>{currency}{calculateGST().otherGST}</span>
-                </div>
-              )}
-              {calculateGST().totalGST > 0 && (
-                <div className='flex justify-between text-gray-700 font-medium'>
-                  <span>Total GST</span>
-                  <span>{currency}{calculateGST().totalGST}</span>
-                </div>
-              )}
+              {/* GST — split only when order mixes apparel + other categories */}
+              {gstData.totalGST > 0 &&
+                (showGstSplit ? (
+                  <>
+                    <div className='flex justify-between text-gray-600 text-sm'>
+                      <span className='pl-4'>GST on Apparels (5%)</span>
+                      <span>{currency}{gstData.apparelGST}</span>
+                    </div>
+                    <div className='flex justify-between text-gray-600 text-sm'>
+                      <span className='pl-4'>GST on Other Items (18%)</span>
+                      <span>{currency}{gstData.otherGST}</span>
+                    </div>
+                    <div className='flex justify-between text-gray-700 font-medium'>
+                      <span>Total GST</span>
+                      <span>{currency}{gstData.totalGST}</span>
+                    </div>
+                  </>
+                ) : (
+                  <div className='flex justify-between text-gray-700 font-medium'>
+                    <span>
+                      {hasApparelGst && 'GST on Apparels (5%)'}
+                      {hasOtherGst && 'GST on Other Items (18%)'}
+                    </span>
+                    <span>{currency}{gstData.totalGST}</span>
+                  </div>
+                ))}
               
               <div className='flex justify-between text-gray-600'>
                 <span>Shipping Fee</span>

@@ -3,9 +3,7 @@ import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-
-
+import { isApparelCategory } from "../utils/gst";
 
 export const ShopContext = createContext();
 
@@ -272,7 +270,7 @@ const ShopContextProvider = (props) => {
               itemTotal = itemInfo.price * cartItems[items][item];
             }
 
-            if (itemInfo.category === 'Apparels') {
+            if (isApparelCategory(itemInfo.category)) {
               apparelAmount += itemTotal;
             } else {
               otherAmount += itemTotal;
