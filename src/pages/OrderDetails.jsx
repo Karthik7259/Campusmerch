@@ -257,8 +257,8 @@ const OrderDetails = () => {
                 ) : (
                   <div className='flex justify-between text-gray-700 font-medium'>
                     <span>
-                      {hasApparelGst && 'GST on Apparels (5%)'}
-                      {hasOtherGst && 'GST on Other Items (18%)'}
+                      {hasApparelGst && 'GST (5%)'}
+                      {hasOtherGst && 'GST (18%)'}
                     </span>
                     <span>{currency}{gstData.totalGST}</span>
                   </div>
