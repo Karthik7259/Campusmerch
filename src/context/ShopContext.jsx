@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { isApparelCategory } from "../utils/gst";
+import { trackAddToCart } from "../utils/analytics";
 
 export const ShopContext = createContext();
 
@@ -108,6 +109,18 @@ const ShopContextProvider = (props) => {
     }
 
     setCartItems(cartData);
+
+    const trackedPrice =
+      product.sizeVariants && product.sizeVariants.length > 0
+        ? product.sizeVariants.find(v => v.size === sizeKey)?.price || product.price
+        : product.price
+
+    trackAddToCart({
+      product,
+      size: sizeKey,
+      quantity: 1,
+      price: trackedPrice,
+    })
 
 
     if (token) {

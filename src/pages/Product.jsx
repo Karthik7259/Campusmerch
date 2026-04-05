@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import { ShopContext } from '../context/ShopContext'
 import RelatedProduct from '../Components/RelatedProduct'
 import PincodeChecker from '../Components/PincodeChecker'
+import { trackViewItem } from '../utils/analytics'
 
 const Product = () => {
   const { productId } = useParams()
@@ -50,6 +51,17 @@ const Product = () => {
     window.scrollTo(0, 0)
     setSize('')
   }, [productId, products])
+
+  useEffect(() => {
+    if (!productData) {
+      return
+    }
+
+    trackViewItem({
+      product: productData,
+      price: productData.price,
+    })
+  }, [productData])
 
   const sizeKey = productData?.category === 'Apparels' ? size : 'default'
   const currentQuantityInCart = productData ? cartItems[productData._id]?.[sizeKey] || 0 : 0

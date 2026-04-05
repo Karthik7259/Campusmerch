@@ -5,6 +5,12 @@ import Title from '../Components/Title.jsx'
 import CartTotal from '../Components/CartTotal'
 import { assets } from '../assets/assets'
 import { ShopContext } from '../context/ShopContext'
+import {
+  buildAnalyticsItem,
+  trackAddPaymentInfo,
+  trackBeginCheckout,
+  trackPurchase,
+} from '../utils/analytics'
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState('razorpay')
@@ -34,6 +40,66 @@ const PlaceOrder = () => {
 
   const [serviceability, setServiceability] = useState(null)
   const [checkingServiceability, setCheckingServiceability] = useState(false)
+
+  const buildOrderItems = () => {
+    const orderItems = []
+
+    for (const items in cartItems) {
+      for (const item in cartItems[items]) {
+        if (cartItems[items][item] > 0) {
+          const itemInfo = products.find((product) => product._id === items)
+          if (itemInfo) {
+            const itemPrice =
+              itemInfo.sizeVariants && itemInfo.sizeVariants.length > 0
+                ? itemInfo.sizeVariants.find((v) => v.size === item)?.price || itemInfo.price
+                : itemInfo.price
+
+            const itemMrpPrice =
+              itemInfo.sizeVariants && itemInfo.sizeVariants.length > 0
+                ? itemInfo.sizeVariants.find((v) => v.size === item)?.mrpPrice ||
+                  itemInfo.Mrpprice
+                : itemInfo.Mrpprice
+
+            orderItems.push({
+              _id: items,
+              productId: items,
+              name: itemInfo.name,
+              category: itemInfo.category,
+              price: itemPrice,
+              mrpPrice: itemMrpPrice,
+              quantity: cartItems[items][item],
+              size: item,
+              weight: itemInfo.weight,
+              length: itemInfo.length,
+              breadth: itemInfo.breadth,
+              height: itemInfo.height,
+            })
+          }
+        }
+      }
+    }
+
+    return orderItems
+  }
+
+  const buildAnalyticsItems = (orderItems) =>
+    orderItems
+      .map((item) =>
+        buildAnalyticsItem(
+          {
+            _id: item.productId || item._id,
+            name: item.name,
+            category: item.category,
+            price: item.price,
+          },
+          {
+            size: item.size,
+            quantity: item.quantity,
+            price: item.price,
+          }
+        )
+      )
+      .filter(Boolean)
 
   useEffect(() => {
     if (!token) {
@@ -159,19 +225,36 @@ const PlaceOrder = () => {
           )
 
           if (data.success) {
+            const pendingPurchase = JSON.parse(
+              sessionStorage.getItem('pending_purchase_analytics') || 'null'
+            )
+            if (pendingPurchase) {
+              trackPurchase({
+                transactionId: data.order?._id || order.receipt || order.id,
+                items: pendingPurchase.items,
+                value: pendingPurchase.value,
+                tax: pendingPurchase.tax,
+                shipping: pendingPurchase.shipping,
+                paymentType: 'Razorpay',
+              })
+              sessionStorage.removeItem('pending_purchase_analytics')
+            }
             toast.success('Payment successful! Redirecting...')
             setCartItems({})
             navigate('/thank-you')
           } else {
+            sessionStorage.removeItem('pending_purchase_analytics')
             toast.error(data.message || 'Payment verification failed')
           }
         } catch (err) {
+          sessionStorage.removeItem('pending_purchase_analytics')
           console.error('Payment verification error:', err)
           toast.error(err.response?.data?.message || err.message || 'Payment verification failed')
         }
       },
       modal: {
         ondismiss: function () {
+          sessionStorage.removeItem('pending_purchase_analytics')
           toast.info('Payment cancelled')
         },
       },
@@ -183,11 +266,13 @@ const PlaceOrder = () => {
     try {
       const rzp = new window.Razorpay(options)
       rzp.on('payment.failed', function (response) {
+        sessionStorage.removeItem('pending_purchase_analytics')
         console.error('Payment failed:', response.error)
         toast.error(`Payment failed: ${response.error.description || 'Please try again'}`)
       })
       rzp.open()
     } catch (err) {
+      sessionStorage.removeItem('pending_purchase_analytics')
       console.error('Razorpay initialization error:', err)
       toast.error('Failed to open payment gateway. Please try again or contact support.')
     }
@@ -207,53 +292,37 @@ const PlaceOrder = () => {
     }
 
     try {
-      const orderItems = []
-
-      for (const items in cartItems) {
-        for (const item in cartItems[items]) {
-          if (cartItems[items][item] > 0) {
-            const itemInfo = products.find((product) => product._id === items)
-            if (itemInfo) {
-              const itemPrice =
-                itemInfo.sizeVariants && itemInfo.sizeVariants.length > 0
-                  ? itemInfo.sizeVariants.find((v) => v.size === item)?.price || itemInfo.price
-                  : itemInfo.price
-
-              const itemMrpPrice =
-                itemInfo.sizeVariants && itemInfo.sizeVariants.length > 0
-                  ? itemInfo.sizeVariants.find((v) => v.size === item)?.mrpPrice ||
-                    itemInfo.Mrpprice
-                  : itemInfo.Mrpprice
-
-              orderItems.push({
-                _id: items,
-                productId: items,
-                name: itemInfo.name,
-                category: itemInfo.category,
-                price: itemPrice,
-                mrpPrice: itemMrpPrice,
-                quantity: cartItems[items][item],
-                size: item,
-                weight: itemInfo.weight,
-                length: itemInfo.length,
-                breadth: itemInfo.breadth,
-                height: itemInfo.height,
-              })
-            }
-          }
-        }
-      }
+      const orderItems = buildOrderItems()
 
       const shippingFee =
         serviceability && serviceability.available
           ? serviceability.shipping_fee
           : delivery_fee
 
+      const totalTax = getCartGST().totalGST
+      const orderValue = getCartAmount() + totalTax + shippingFee
+      const analyticsItems = buildAnalyticsItems(orderItems)
+
       const orderData = {
         address: formData,
         items: orderItems,
-        amount: getCartAmount() + getCartGST().totalGST + shippingFee,
+        amount: orderValue,
       }
+
+      trackBeginCheckout({
+        items: analyticsItems,
+        value: orderValue,
+        tax: totalTax,
+        shipping: shippingFee,
+      })
+
+      trackAddPaymentInfo({
+        items: analyticsItems,
+        value: orderValue,
+        paymentType: method === 'razorpay' ? 'Razorpay' : method.toUpperCase(),
+        tax: totalTax,
+        shipping: shippingFee,
+      })
 
       switch (method) {
         case 'cod': {
@@ -262,6 +331,14 @@ const PlaceOrder = () => {
           })
 
           if (response.data.success) {
+            trackPurchase({
+              transactionId: response.data.order?._id || response.data.orderId,
+              items: analyticsItems,
+              value: orderValue,
+              tax: totalTax,
+              shipping: shippingFee,
+              paymentType: 'COD',
+            })
             setCartItems({})
             navigate('/thank-you')
           } else {
@@ -281,6 +358,15 @@ const PlaceOrder = () => {
               { headers: { token } }
             )
             if (responseRazorpay.data.success) {
+              sessionStorage.setItem(
+                'pending_purchase_analytics',
+                JSON.stringify({
+                  items: analyticsItems,
+                  value: orderValue,
+                  tax: totalTax,
+                  shipping: shippingFee,
+                })
+              )
               initPay(responseRazorpay.data.order)
             } else {
               toast.error(responseRazorpay.data.message || 'Failed to initiate Razorpay payment')

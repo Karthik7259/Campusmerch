@@ -163,6 +163,7 @@ const CategoryPageWithFilters = ({ categoryName, title1, title2, description }) 
                   price={item.price}
                   Mrpprice={item.Mrpprice}
                   quantity={item.quantity}
+                  category={item.category}
                 />
               ))
             ) : (

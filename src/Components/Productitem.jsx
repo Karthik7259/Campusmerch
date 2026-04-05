@@ -1,8 +1,9 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext'
+import { trackSelectItem } from '../utils/analytics'
 
-const Productitem = ({ id, image, name, price, Mrpprice, quantity }) => {
+const Productitem = ({ id, image, name, price, Mrpprice, quantity, category }) => {
   const { currency } = useContext(ShopContext)
   const isSoldOut = quantity === 0
   const isLowStock = quantity > 0 && quantity < 10
@@ -11,6 +12,16 @@ const Productitem = ({ id, image, name, price, Mrpprice, quantity }) => {
     <Link
       className="group flex flex-col h-full border border-border-light bg-white"
       to={`/product/${id}`}
+      onClick={() =>
+        trackSelectItem({
+          product: {
+            _id: id,
+            name,
+            category,
+            price,
+          },
+        })
+      }
     >
       <div className="relative aspect-[4/5] bg-brand-cream image-zoom">
         <img className="h-full w-full object-cover" src={image[0]} alt={name} />

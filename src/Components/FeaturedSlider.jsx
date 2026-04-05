@@ -73,6 +73,7 @@ const FeaturedSlider = () => {
               price={activeProduct.price}
               Mrpprice={activeProduct.Mrpprice}
               quantity={activeProduct.quantity}
+              category={activeProduct.category}
             />
           </div>
 
@@ -96,6 +97,7 @@ const FeaturedSlider = () => {
                   price={item.price}
                   Mrpprice={item.Mrpprice}
                   quantity={item.quantity}
+                  category={item.category}
                 />
               </div>
             ))}

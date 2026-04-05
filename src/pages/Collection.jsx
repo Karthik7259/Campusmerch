@@ -319,6 +319,7 @@ const Collection = () => {
                 Mrpprice={item.Mrpprice}
                 image={item.image}
                 quantity={item.quantity}
+                category={item.category}
               />
             ))}
           </div>

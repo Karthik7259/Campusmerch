@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { trackPurchase } from '../utils/analytics';
 
 const Verify = () => {
 
@@ -28,15 +29,31 @@ const Verify = () => {
 
 
     if(response.data.success){
+        const pendingPurchase = JSON.parse(
+          sessionStorage.getItem('pending_purchase_analytics') || 'null'
+        );
+        if (pendingPurchase) {
+          trackPurchase({
+            transactionId: orderId,
+            items: pendingPurchase.items,
+            value: pendingPurchase.value,
+            tax: pendingPurchase.tax,
+            shipping: pendingPurchase.shipping,
+            paymentType: 'Stripe',
+          });
+          sessionStorage.removeItem('pending_purchase_analytics');
+        }
         setCartItems({});
         navigate('/Orders');
     }else{
+        sessionStorage.removeItem('pending_purchase_analytics');
         navigate('/cart');
     }
 
 
 
-  }catch(err){
+ }catch(err){
+    sessionStorage.removeItem('pending_purchase_analytics');
     console.log(err);
 
     toast.error(err.message);

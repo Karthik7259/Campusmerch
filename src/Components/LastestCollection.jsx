@@ -45,6 +45,7 @@ const LatestCollection = () => {
               price={item.price}
               Mrpprice={item.Mrpprice}
               quantity={item.quantity}
+              category={item.category}
             />
           ))
         )}

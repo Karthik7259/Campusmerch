@@ -339,6 +339,7 @@ const Collegemerchandise = () => {
                   Mrpprice={item.Mrpprice}
                   image={item.image}
                   quantity={item.quantity}
+                  category={item.category}
                 />
               ))
             ) : (
